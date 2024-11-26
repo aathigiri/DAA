@@ -1,0 +1,175 @@
+1. # List of points
+points = [(1, 2), (4, 5), (7, 8), (3, 1)]
+
+# Initialize minimum distance and closest pair
+min_distance = float('inf')
+closest_pair = None
+
+# Iterate through each pair of points
+for i in range(len(points)):
+    for j in range(i + 1, len(points)):
+        # Calculate the distance between the two points
+        distance = ((points[i][0] - points[j][0]) ** 2 + (points[i][1] - points[j][1]) ** 2) ** 0.5
+        # Update minimum distance and closest pair if a new minimum is found
+        if distance < min_distance:
+            min_distance = distance
+            closest_pair = (points[i], points[j])
+
+# Output the closest pair and the minimum distance
+print(f"Closest pair: {closest_pair[0]} - {closest_pair[1]} Minimum distance: {min_distance}")
+
+2. import math
+
+# Sample set of points
+points = [(10, 0), (11, 5), (5, 3), (9, 3.5), (15, 3), (12.5, 7), (6, 6.5), (7.5, 4.5)]
+
+# Function to calculate Euclidean distance
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+# Brute force method to find the closest pair of points
+def closest_pair(points):
+    min_distance = float('inf')
+    closest_points = (None, None)
+    
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            distance = euclidean_distance(points[i], points[j])
+            if distance < min_distance:
+                min_distance = distance
+                closest_points = (points[i], points[j])
+    
+    return closest_points, min_distance
+
+# Testing the function
+closest_points, min_distance = closest_pair(points)
+print(f"The closest pair of points is: {closest_points} with a distance of {min_distance:.2f}")
+
+3. points = [(1, 1), (4, 6), (8, 1), (0, 0), (3, 3)]
+
+def orientation(p, q, r):
+    return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
+
+hull = []
+n = len(points)
+
+for i in range(n):
+    for j in range(n):
+        if i != j:
+            for k in range(n):
+                if k != i and k != j:
+                    if orientation(points[i], points[j], points[k]) < 0:
+                        break
+            else:
+                if points[j] not in hull:
+                    hull.append(points[j])
+                if points[i] not in hull:
+                    hull.append(points[i])
+
+hull = sorted(hull, key=lambda p: (p[0], p[1]))
+print("Convex Hull:", hull)
+
+4. import itertools
+import math
+
+# Function to calculate the Euclidean distance between two cities
+def distance(city1, city2):
+    return math.sqrt((city1[0] - city2[0]) ** 2 + (city1[1] - city2[1]) ** 2)
+
+# Function to solve the TSP
+def tsp(cities):
+    min_distance = float('inf')
+    shortest_path = []
+    start_city = cities[0]
+    
+    for perm in itertools.permutations(cities[1:]):
+        current_path = [start_city] + list(perm) + [start_city]
+        current_distance = sum(distance(current_path[i], current_path[i + 1]) for i in range(len(current_path) - 1))
+        
+        if current_distance < min_distance:
+            min_distance = current_distance
+            shortest_path = current_path
+            
+    return min_distance, shortest_path
+
+# Test Cases
+test_case_1 = [(1, 2), (4, 5), (7, 1), (3, 6)]
+test_case_2 = [(2, 4), (8, 1), (1, 7), (6, 3), (5, 9)]
+
+# Running test cases
+result_1 = tsp(test_case_1)
+result_2 = tsp(test_case_2)
+
+print("Test Case 1:")
+print("Shortest Distance:", result_1[0])
+print("Shortest Path:", result_1[1])
+
+print("\nTest Case 2:")
+print("Shortest Distance:", result_2[0])
+print("Shortest Path:", result_2[1])
+
+5. import itertools
+
+cost_matrix_1 = [
+    [3, 10, 7],
+    [8, 5, 12],
+    [4, 6, 9]
+]
+
+cost_matrix_2 = [
+    [15, 9, 4],
+    [8, 7, 18],
+    [6, 12, 11]
+]
+
+def total_cost(assignment, cost_matrix):
+    return sum(cost_matrix[i][assignment[i]] for i in range(len(assignment)))
+
+def assignment_problem(cost_matrix):
+    num_workers = len(cost_matrix)
+    workers = list(range(num_workers))
+    min_cost = float('inf')
+    best_assignment = None
+    
+    for perm in itertools.permutations(workers):
+        current_cost = total_cost(perm, cost_matrix)
+        if current_cost < min_cost:
+            min_cost = current_cost
+            best_assignment = perm
+            
+    return best_assignment, min_cost
+
+# Test Case 1
+optimal_assignment_1, total_cost_1 = assignment_problem(cost_matrix_1)
+print(f"Optimal Assignment: {[(f'worker {i+1}', f'task {optimal_assignment_1[i]+1}') for i in range(len(optimal_assignment_1))]}")
+print(f"Total Cost: {total_cost_1}")
+
+# Test Case 2
+optimal_assignment_2, total_cost_2 = assignment_problem(cost_matrix_2)
+print(f"Optimal Assignment: {[(f'worker {i+1}', f'task {optimal_assignment_2[i]+1}') for i in range(len(optimal_assignment_2))]}")
+print(f"Total Cost: {total_cost_2}")
+
+6. items = [0, 1, 2]
+weights = [2, 3, 1]
+values = [4, 5, 3]
+capacity = 4
+
+# Total value calculation
+total_value = lambda selected_items: sum(values[i] for i in selected_items)
+
+# Feasibility check
+is_feasible = lambda selected_items: sum(weights[i] for i in selected_items) <= capacity
+
+# Finding optimal selection
+optimal_selection = []
+max_value = 0
+
+for i in range(1 << len(items)):
+    selected_items = [j for j in range(len(items)) if (i & (1 << j))]
+    if is_feasible(selected_items):
+        current_value = total_value(selected_items)
+        if current_value > max_value:
+            max_value = current_value
+            optimal_selection = selected_items
+
+print(f"Test Case 1:\nOptimal Selection: {optimal_selection}\nTotal Value: {max_value}")

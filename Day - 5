@@ -1,0 +1,179 @@
+1. # Input array
+N = 8
+a = [5, 7, 3, 4, 9, 12, 6, 2]
+
+# Finding minimum and maximum values
+min_value = min(a)
+max_value = max(a)
+
+# Output results
+print(f"Min = {min_value}, Max = {max_value}")
+
+2. # Input array
+arrays = [
+    [2, 4, 6, 8, 10, 12, 14, 18],
+    [11, 13, 15, 17, 19, 21, 23, 35, 37],
+    [22, 34, 35, 36, 43, 67, 12, 13, 15, 17]
+]
+
+# Iterate through each array
+for arr in arrays:
+    min_value = min(arr)
+    max_value = max(arr)
+    
+    print(f"Min = {min_value}, Max = {max_value}")
+
+3. # Input arrays
+arrays = [
+    [31, 23, 35, 27, 11, 21, 15, 28],
+    [22, 34, 25, 36, 43, 67, 52, 13, 65, 17]
+]
+
+# Merge Sort Algorithm
+for arr in arrays:
+    n = len(arr)
+    if n > 1:
+        mid = n // 2
+        left_half = arr[:mid]
+        right_half = arr[mid:]
+
+        # Sorting left half
+        for i in range(len(left_half)):
+            for j in range(i + 1, len(left_half)):
+                if left_half[i] > left_half[j]:
+                    left_half[i], left_half[j] = left_half[j], left_half[i]
+
+        # Sorting right half
+        for i in range(len(right_half)):
+            for j in range(i + 1, len(right_half)):
+                if right_half[i] > right_half[j]:
+                    right_half[i], right_half[j] = right_half[j], right_half[i]
+
+        # Merging sorted halves
+        sorted_arr = []
+        i = j = 0
+        while i < len(left_half) and j < len(right_half):
+            if left_half[i] < right_half[j]:
+                sorted_arr.append(left_half[i])
+                i += 1
+            else:
+                sorted_arr.append(right_half[j])
+                j += 1
+        sorted_arr.extend(left_half[i:])
+        sorted_arr.extend(right_half[j:])
+        
+        print(f"Sorted Output: {sorted_arr}")
+
+4. # Merge Sort Implementation
+array = [12, 4, 78, 23, 45, 67, 89, 1]
+comparison_count = 0
+
+def merge_sort(arr):
+    global comparison_count
+    if len(arr) > 1:
+        mid = len(arr) // 2
+        left_half = arr[:mid]
+        right_half = arr[mid:]
+
+        merge_sort(left_half)
+        merge_sort(right_half)
+
+        i = j = k = 0
+
+        while i < len(left_half) and j < len(right_half):
+            comparison_count += 1
+            if left_half[i] < right_half[j]:
+                arr[k] = left_half[i]
+                i += 1
+            else:
+                arr[k] = right_half[j]
+                j += 1
+            k += 1
+
+        while i < len(left_half):
+            arr[k] = left_half[i]
+            i += 1
+            k += 1
+
+        while j < len(right_half):
+            arr[k] = right_half[j]
+            j += 1
+            k += 1
+
+merge_sort(array)
+print("Sorted array:", array)
+print("Number of comparisons:", comparison_count)
+
+5. # Initial array
+array = [10, 16, 8, 12, 15, 6, 3, 9, 5]
+
+# Quick Sort Implementation
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[0]
+    less_than_pivot = [x for x in arr[1:] if x <= pivot]
+    greater_than_pivot = [x for x in arr[1:] if x > pivot]
+    
+    # Displaying the array after partitioning
+    print(f"Pivot: {pivot}, Less: {less_than_pivot}, Greater: {greater_than_pivot}")
+    
+    return quick_sort(less_than_pivot) + [pivot] + quick_sort(greater_than_pivot)
+
+# Sorting the array
+sorted_array = quick_sort(array)
+print("Sorted Array:", sorted_array)
+
+6. # Initial array
+arr = [19, 72, 35, 46, 58, 91, 22, 31]
+
+# Function to perform partitioning
+def partition(array, low, high):
+    pivot = array[(low + high) // 2]  # Choosing the middle element as pivot
+    i = low - 1
+    j = high + 1
+    while True:
+        i += 1
+        while array[i] < pivot:
+            i += 1
+        j -= 1
+        while array[j] > pivot:
+            j -= 1
+        if i >= j:
+            return j
+        array[i], array[j] = array[j], array[i]  # Swap elements
+
+# Recursive Quick Sort function
+def quick_sort(array, low, high):
+    if low < high:
+        pi = partition(array, low, high)
+        print("Array after partitioning:", array)  # Display array after partition
+        quick_sort(array, low, pi)
+        quick_sort(array, pi + 1, high)
+
+# Execute Quick Sort
+quick_sort(arr, 0, len(arr) - 1)
+print("Sorted array:", arr)
+
+7. # Initializing the array and search key
+array = [5, 10, 15, 20, 25, 30, 35, 40, 45]
+search_key = 20
+low = 0
+high = len(array) - 1
+comparisons = 0
+
+# Binary Search Implementation
+while low <= high:
+    mid = (low + high) // 2
+    comparisons += 1
+    if array[mid] == search_key:
+        print(f"Element found at index: {mid}, Comparisons made: {comparisons}")
+        break
+    elif array[mid] < search_key:
+        low = mid + 1
+    else:
+        high = mid - 1
+else:
+    print("Element not found, Comparisons made:", comparisons)
+
+
